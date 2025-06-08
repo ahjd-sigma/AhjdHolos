@@ -1,4 +1,4 @@
-package ahjd.ahjdHolos;
+package ahhh.ahjdHolos;
 
 import org.bukkit.Location;
 import java.util.UUID;
@@ -8,6 +8,7 @@ import java.util.UUID;
  */
 public class TimedHoloInfo {
     public UUID uuid;
+    public Location location;
     public String world;
     public double x, y, z;
     public String text;
@@ -15,6 +16,7 @@ public class TimedHoloInfo {
 
     public TimedHoloInfo(UUID uuid, Location loc, String text, long expireAt) {
         this.uuid = uuid;
+        this.location = loc;
         this.world = loc.getWorld().getName();
         this.x = loc.getX();
         this.y = loc.getY();
@@ -24,6 +26,6 @@ public class TimedHoloInfo {
     }
 
     public Location toLocation() {
-        return new Location(org.bukkit.Bukkit.getWorld(world), x, y, z);
+        return this.location;
     }
 }

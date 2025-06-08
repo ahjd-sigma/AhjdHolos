@@ -1,4 +1,4 @@
-package ahjd.ahjdHolos;
+package ahhh.ahjdHolos;
 
 public enum HoloType {
     TEMPORARY,

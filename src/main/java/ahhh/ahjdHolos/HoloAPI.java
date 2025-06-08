@@ -1,4 +1,4 @@
-package ahjd.ahjdHolos;
+package ahhh.ahjdHolos;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

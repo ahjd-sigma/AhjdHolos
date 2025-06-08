@@ -1,4 +1,4 @@
-package ahjd.ahjdHolos;
+package ahhh.ahjdHolos;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

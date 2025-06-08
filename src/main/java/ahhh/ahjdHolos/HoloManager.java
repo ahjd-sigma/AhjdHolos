@@ -1,4 +1,4 @@
-package ahjd.ahjdHolos;
+package ahhh.ahjdHolos;
 
 import org.bukkit.Location;
 import org.bukkit.entity.TextDisplay;
@@ -9,7 +9,6 @@ import org.bukkit.scheduler.BukkitTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import org.bukkit.scheduler.BukkitRunnable; // For possible future expansion
 
 /**
  * Internal manager for tracking and cleaning up holograms.

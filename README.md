@@ -32,6 +32,9 @@ import ahjd.ahjdHolos.HoloType;
 ```java
 // Spawns a hologram that despawns after 10 seconds
 TextDisplay holo = HoloAPI.spawnHologram(plugin, location, "Hello, world!", HoloType.TEMPORARY, 10, null);
+// Access the hologram's location from the TimedHoloInfo object
+TimedHoloInfo timedHoloInfo = HoloAPI.getTimedHoloInfo(holo.getUniqueId());
+Location holoLocation = timedHoloInfo.location;
 ```
 
 ### Spawning a Persistent Hologram
@@ -55,7 +58,7 @@ boolean removed = HoloAPI.removeHologram(holo.getUniqueId());
 ### Removing All Holograms for a Plugin
 ```java
 // Remove all holograms spawned by your plugin
-HoloAPI.removeAllHolograms(plugin);
+//HoloAPI.removeAllHolograms(plugin);
 ```
 
 ---
