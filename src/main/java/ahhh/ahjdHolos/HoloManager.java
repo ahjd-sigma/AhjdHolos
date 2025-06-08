@@ -66,10 +66,6 @@ class HoloManager {
         return display;
     }
 
-    // Legacy for backward compatibility
-    public TextDisplay spawnHologram(Plugin plugin, Location location, String text, HoloType type, int durationSeconds, String uniqueId) {
-        return spawnHologram(plugin, location, text, HoloDisplaySettings.builder().build(), type, durationSeconds, uniqueId);
-    }
 
 
     private void savePersistentHologram(String id, Location loc, String text) {
@@ -90,7 +86,7 @@ class HoloManager {
             double z = persistentConfig.getDouble(id + ".z");
             String text = persistentConfig.getString(id + ".text");
             Location loc = new Location(Bukkit.getWorld(world), x, y, z);
-            spawnHologram(plugin, loc, text, HoloType.PERSISTENT, 0, id);
+            spawnHologram(plugin, loc, text, HoloDisplaySettings.builder().build(), HoloType.PERSISTENT, 0, id);
         }
         // Timed
         List<String> toRemove = new ArrayList<>();
@@ -112,7 +108,7 @@ class HoloManager {
                 toRemove.add(uuidStr);
             } else {
                 // Still valid, respawn and schedule removal
-                TextDisplay display = spawnHologram(plugin, loc, text, HoloType.TEMPORARY, (int)((expireAt-now)/1000), null);
+                TextDisplay display = spawnHologram(plugin, loc, text, HoloDisplaySettings.builder().build(), HoloType.TEMPORARY, (int)((expireAt-now)/1000), null);
                 timedInfos.put(display.getUniqueId(), new TimedHoloInfo(display.getUniqueId(), loc, text, expireAt));
             }
         }
