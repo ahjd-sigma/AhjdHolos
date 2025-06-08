@@ -12,41 +12,51 @@ A robust, crash-safe hologram API for Spigot 1.21.5+.
 
 ## Adding AhjdHolos as a Dependency
 
-### 1. Build and Install the Plugin Locally
-If AhjdHolos is not published to a public Maven repository, you can use it as a local dependency:
+### 1. Using JitPack (Recommended)
+Since AhjdHolos is public on GitHub, you can use [JitPack](https://jitpack.io/) to add it as a dependency in Maven or Gradle:
 
 #### **Maven**
-- Build AhjdHolos (using `mvn package` or your IDE)
-- Copy the resulting `AhjdHolos-x.x.x.jar` to your project's `libs` folder (create if it doesn't exist)
-- Add to your `pom.xml`:
-
+Add the JitPack repository to your `pom.xml`:
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+Then add the dependency (replace `VERSION` with a release/tag or `main` for latest):
 ```xml
 <dependency>
-    <groupId>ahjd.ahjdHolos</groupId>
+    <groupId>com.github.ahjd-sigma</groupId>
     <artifactId>AhjdHolos</artifactId>
-    <version>1.0.0</version>
-    <scope>system</scope>
-    <systemPath>${project.basedir}/libs/AhjdHolos-1.0.0.jar</systemPath>
+    <version>main</version>
 </dependency>
 ```
 
 #### **Gradle**
-- Build AhjdHolos and place the jar in your `libs` folder
-- Add to your `build.gradle`:
-
+Add the JitPack repository to your `build.gradle`:
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+```
+Then add the dependency:
 ```groovy
 dependencies {
-    implementation files('libs/AhjdHolos-1.0.0.jar')
+    implementation 'com.github.ahjd-sigma:AhjdHolos:main'
 }
 ```
 
 ### 2. plugin.yml
 Add this to your plugin's `plugin.yml` to ensure AhjdHolos loads before your plugin:
-
 ```yaml
 depends:
   - AhjdHolos
 ```
+
+### 3. Manual/Local Alternative
+If you prefer, you can still build AhjdHolos locally and add the jar to your project as described below.
 
 ---
 
