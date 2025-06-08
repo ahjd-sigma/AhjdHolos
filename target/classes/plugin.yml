@@ -1,0 +1,5 @@
+name: AhjdHolos
+version: '1'
+main: ahjd.ahjdHolos.AhjdHolos
+api-version: '1.21'
+authors: [ ahjd ]

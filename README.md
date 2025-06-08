@@ -25,14 +25,16 @@ Add the JitPack repository to your `pom.xml`:
     </repository>
 </repositories>
 ```
-Then add the dependency (replace `VERSION` with a release/tag or `main` for latest):
+Then add the dependency (replace `VERSION` with a release/tag, e.g. `v1.0.0`, for best stability):
 ```xml
 <dependency>
     <groupId>com.github.ahjd-sigma</groupId>
     <artifactId>AhjdHolos</artifactId>
-    <version>main</version>
+    <version>v1.0.0</version>
 </dependency>
 ```
+> **Tip:** You can use `main` for the latest commit, but using a tag like `v1.0.0` is recommended for stability.
+
 
 #### **Gradle**
 Add the JitPack repository to your `build.gradle`:
@@ -41,12 +43,14 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 ```
-Then add the dependency:
+Then add the dependency (replace `VERSION` with a release/tag, e.g. `v1.0.0`, for best stability):
 ```groovy
 dependencies {
-    implementation 'com.github.ahjd-sigma:AhjdHolos:main'
+    implementation 'com.github.ahjd-sigma:AhjdHolos:v1.0.0'
 }
 ```
+> **Tip:** You can use `main` for the latest commit, but using a tag like `v1.0.0` is recommended for stability.
+
 
 ### 2. plugin.yml
 Add this to your plugin's `plugin.yml` to ensure AhjdHolos loads before your plugin:
@@ -57,6 +61,16 @@ depends:
 
 ### 3. Manual/Local Alternative
 If you prefer, you can still build AhjdHolos locally and add the jar to your project as described below.
+
+---
+
+## JitPack Troubleshooting
+- **401 Unauthorized:** Make sure your GitHub repo is public.
+- **Build errors:** Go to [JitPack Build Log](https://jitpack.io/#ahjd-sigma/AhjdHolos) and check for errors. You must have a valid `pom.xml` or `build.gradle` at the root.
+- **Version not found:** Make sure you have created a release or tag in GitHub and triggered a build on JitPack.
+- **Force Maven/Gradle to retry:**
+    - Maven: `mvn dependency:purge-local-repository -DmanualInclude="com.github.ahjd-sigma:AhjdHolos" -DreResolve=false`
+    - Gradle: `./gradlew --refresh-dependencies`
 
 ---
 
@@ -138,3 +152,4 @@ public class ExamplePlugin extends JavaPlugin {
 ---
 
 For more advanced features or questions, see the code or contact the author.
+git tag v1.0.0
