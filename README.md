@@ -1,54 +1,125 @@
-# AhjdHolos Public API Documentation
-evil emoji plugin by chatgpt
+# AhjdHolos v0.2
+
+fornite
 
 ## Features
-- **Public API** for other plugins to spawn and manage holographic text (TextDisplay entities)
-- **Temporary Holograms:** Auto-despawn after a set time, crash-safe (no orphans)
-- **Persistent Holograms:** Saved to disk, always restored after server/plugin restart
-- **Automatic cleanup** of all holograms on plugin disable
+
+- 🎨 **Public API** for other plugins to spawn and manage holographic text (TextDisplay entities)
+- 🖥️ **Interactive GUI** for easy hologram management
+- ⏱️ **Temporary Holograms:** Auto-despawn after a set time, crash-safe (no orphans)
+- 💾 **Persistent Holograms:** Saved to disk, always restored after server/plugin restart
+- 🎨 **Rich Text Support:** Colors, formatting, and custom fonts
+- 🎯 **Precise Control:** Move, edit, and manage holograms with ease
+- 🔒 **Permission System:** Fine-grained control over commands
+- 📝 **Tab Completion:** Quick and easy command usage
+- 🚀 **High Performance:** Optimized for servers of all sizes
+
+## Colors
+
+### Text Colors
+You can use Minecraft color codes with `&` or `§` in your text:
+- `&a` or `§a` for green text
+- `&l` for bold
+- `&n` for underline
+- `&o` for italic
+- `&m` for strikethrough
+- `&k` for obfuscated text
+- `&r` to reset formatting
+
+Example: `&aHello &lWorld!`
+
+### Background Colors
+By default, holograms have no background. To add a background:
+- Use the `-bg` flag followed by a color name (e.g., `RED`, `AQUA`, `GOLD`)
+- The background will be semi-transparent by default
+- Available colors are defined in the `HoloColors` class
+
+Examples:
+- No background: `/holos create "&aHello World" 30`
+- With background: `/holos create "&aHello World" -bg RED 30`
+- Just background (default 30s): `/holos create "&aHello World" -bg RED`
+
+### Hex Color Codes
+You can use hex color codes in your text for more control:
+- `{#RRGGBB}` - Sets text color
+- `{##RRGGBB}` - Sets background color
+- `{##RRGGBB:TTT}` - Sets background with transparency (TTT = 000-255)
+
+Example: `{#FF0000}Red {#00FF00}Green {#0000FF}Blue`
+Example with background: `{##FFFFFF:100}White background {##000000:100}Black background`
+
+### Color Presets
+Available color names (from `HoloColors` class):
+- Basic: `BLACK`, `WHITE`, `GRAY`, `LIGHT_GRAY`, `DARK_GRAY`
+- Red: `RED`, `DARK_RED`, `CRIMSON`, `FIREBRICK`
+- Green: `GREEN`, `DARK_GREEN`, `LIME`, `FOREST_GREEN`
+- Blue: `BLUE`, `NAVY`, `TEAL`, `AQUA`
+- Purple: `PURPLE`, `INDIGO`, `VIOLET`, `MAGENTA`
+- Other: `YELLOW`, `GOLD`, `ORANGE`, `PINK`
+
+Example: `/holos create "{#FFD700}Golden Text" GRAY 30` - Creates text with gold color and gray background
 
 ---
-> **Tip:** You can use `main` for the latest commit, but using a tag like `0.1` is recommended for stability.
 
+## Developer API
 
-### 2. plugin.yml
+### Dependencies
 Add this to your plugin's `plugin.yml` to ensure AhjdHolos loads before your plugin:
 ```yaml
 depends:
   - AhjdHolos
 ```
 
----
-
-## Usage
-
 ### Import
 ```java
 import ahhh.ahjdHolos.HoloAPI;
 import ahhh.ahjdHolos.HoloType;
 import ahhh.ahjdHolos.HoloDisplaySettings;
+import ahhh.ahjdHolos.HoloManager;
+import ahhh.ahjdHolos.HoloColors;
 ```
 
-### Spawning a Temporary (Timed) Hologram
+### Basic Usage
 ```java
-TextDisplay holo = HoloAPI.spawnHologram(
+// Get the HoloManager instance
+HoloManager holoManager = HoloManager.getInstance();
+
+// Create a hologram with default settings
+Location location = player.getLocation().add(0, 2, 0);
+HoloDisplaySettings settings = HoloDisplaySettings.builder()
+    .text("Hello, World!")
+    .color(HoloColors.AQUA)
+    .font("minecraft:default")
+    .shadowed(true)
+    .seeThrough(true)
+    .textOpacity(200) // 0-255
+    .lineWidth(200)
+    .alignment(TextAlignment.CENTER)
+    .hasBackground(true)
+    .backgroundColor(Color.fromARGB(128, 0, 0, 0)) // ARGB
+    .billboard(Billboard.CENTER) // faces player like armorstand name
+    .build();
+
+// Spawn a temporary hologram (10 seconds)
+TextDisplay holo = holoManager.spawnHologram(
     plugin,
     location,
-    HoloAPI.colorize("{#FF00FF}Hello, world! {#00FFFF}\u2728"), // Hex color & icon support
-    HoloDisplaySettings.builder()
-        .font("minecraft:default")
-        .shadowed(true)
-        .seeThrough(true)
-        .textOpacity(200) // 0-255
-        .lineWidth(200)
-        .alignment(TextAlignment.CENTER)
-        .hasBackground(true)
-        .backgroundColor(Color.fromARGB(128, 0, 0, 0)) // ARGB
-        .billboard(Billboard.CENTER) // faces player like armorstand name
-        .build(),
+    settings,
     HoloType.TEMPORARY,
     10, // seconds
-    null
+    null // or "custom-id" for persistent holograms
+);
+
+// Spawn a persistent hologram
+TextDisplay persistentHolo = holoManager.spawnHologram(
+    plugin,
+    location,
+    HoloAPI.colorize("{#FF00FF}Persistent {#00FFFF}Hologram"),
+    HoloDisplaySettings.builder().build(),
+    HoloType.PERSISTENT,
+    0, // not used for persistent holograms
+    "my-hologram" // unique ID for persistence
+);
 );
 // Access the hologram's location from the TimedHoloInfo object
 TimedHoloInfo timedHoloInfo = HoloAPI.getTimedHoloInfo(holo.getUniqueId());
@@ -85,7 +156,7 @@ TextDisplay holo = HoloAPI.spawnHologram(
 - **Builder pattern:** Easy, modern developer API
 
 ### Color Presets
-For convenience, you can use these ARGB color presets (see `HoloColors.java`):
+For convenience, you can use these ARGB color presets or add your own (see `HoloColors.java`):
 ```java
 public static final Color BLACK      = Color.fromARGB(255, 0, 0, 0);
 public static final Color WHITE      = Color.fromARGB(255, 255, 255, 255);
@@ -122,11 +193,50 @@ Use them in your builder: `.backgroundColor(HoloColors.MAGENTA)`
 - Use `{#RRGGBB}` or `&#RRGGBB` in your text for hex colors.
 - Unicode icons (e.g., `\u2728`) are supported if your font/resource pack allows.
 
-### Removing All Holograms For Your Plugin
+### Available Methods
+
 ```java
-// Remove all holograms spawned by your plugin
+// Get a hologram by its UUID
+TextDisplay holo = HoloManager.getInstance().getHologram(uuid);
+
+// Get all holograms visible to a player
+List<TextDisplay> holograms = HoloManager.getInstance().getHolograms(player);
+
+// Move a hologram to a new location
+boolean moved = HoloManager.getInstance().moveHologram(uuid, newLocation);
+
+// Edit a hologram's text
+boolean edited = HoloManager.getInstance().editHologram(uuid, "New Text");
+
+// Remove a specific hologram
+boolean removed = HoloManager.getInstance().removeHologram(uuid);
+
+// Remove all holograms
+HoloManager.getInstance().removeAll();
+
+// Remove all holograms for a specific plugin
 HoloManager.getInstance().removeAllHolograms(plugin);
 ```
+
+## Installation
+
+1. Place the `AhjdHolos.jar` in your server's `plugins` folder
+2. Restart your server
+3. Configure permissions as needed
+4. Use `/holos` to get started
+
+## Dependencies
+
+- Spigot/Paper 1.21.4 or higher
+- Java 17 or higher
+
+## Contributing
+
+Contributions are welcome! Please submit a pull request or open an issue for any bugs or feature requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### Troubleshooting
 - **Dependency not found:**

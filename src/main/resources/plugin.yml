@@ -1,5 +1,74 @@
 name: AhjdHolos
-version: '0.1'
+version: '0.3'
 main: ahhh.ahjdHolos.AhjdHolos
 api-version: '1.21'
 authors: [ ahjd ]
+description: Advanced hologram management plugin with GUI support
+website: https://example.com
+
+# Command registration
+commands:
+  holos:
+    description: Manage holograms
+    usage: |
+      /holos - Show help
+      /holos list - List your holograms
+      /holos create <text> [-bg <color>] [seconds] - Create a hologram
+      /holos remove <id> - Remove a hologram
+      /holos move <id> - Move a hologram
+      /holos edit <id> <text> - Edit a hologram
+      /holos gui - Open hologram manager
+    permission: ahjdholos.use
+    permission-message: '&cYou do not have permission to use this command.'
+    aliases: [hologram, holo]
+
+# Permissions
+permissions:
+  # Admin permission - gives all permissions
+  ahjdholos.admin:
+    description: Gives all permissions for AhjdHolos
+    children:
+      ahjdholos.*: true
+    default: op
+    
+  # Individual permissions
+  ahjdholos.*:
+    description: Gives all permissions for AhjdHolos
+    children:
+      ahjdholos.use: true
+      ahjdholos.create: true
+      ahjdholos.remove: true
+      ahjdholos.move: true
+      ahjdholos.edit: true
+      ahjdholos.gui: true
+    default: false
+    
+  # Basic usage permission
+  ahjdholos.use:
+    description: Allows using the main command
+    default: true
+    
+  # Create permission
+  ahjdholos.create:
+    description: Allows creating holograms
+    default: op
+    
+  # Remove permission
+  ahjdholos.remove:
+    description: Allows removing holograms
+    default: op
+    
+  # Move permission
+  ahjdholos.move:
+    description: Allows moving holograms
+    default: op
+    
+  # Edit permission
+  ahjdholos.edit:
+    description: Allows editing hologram text
+    default: op
+    
+  # GUI permission
+  ahjdholos.gui:
+    description: Allows using the hologram manager GUI
+    default: true

@@ -1,6 +1,7 @@
 package ahhh.ahjdHolos;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.Bukkit;
@@ -181,5 +182,96 @@ class HoloManager {
         timedConfig.set(key + ".text", info.text);
         timedConfig.set(key + ".expireAt", info.expireAt);
         try { timedConfig.save(timedFile); } catch (IOException ignored) {}
+    }
+
+    /**
+     * Gets all holograms owned by a player
+     * @param player The player to get holograms for
+     * @return List of TextDisplay holograms
+     */
+    public List<TextDisplay> getHolograms(Player player) {
+        List<TextDisplay> holograms = new ArrayList<>();
+        for (TextDisplay display : activeHolograms.values()) {
+            // In a real implementation, you might want to check ownership here
+            // For now, returning all holograms visible to the player
+            if (display.getWorld().equals(player.getWorld())) {
+                holograms.add(display);
+            }
+        }
+        return holograms;
+    }
+
+    /**
+     * Moves a hologram to a new location
+     * @param id The UUID of the hologram to move
+     * @param location The new location
+     * @return true if the hologram was found and moved, false otherwise
+     */
+    public boolean moveHologram(UUID id, Location location) {
+        TextDisplay display = activeHolograms.get(id);
+        if (display != null) {
+            display.teleport(location);
+            
+            // Update persistent storage if this is a persistent hologram
+            persistentIds.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(id))
+                .findFirst()
+                .ifPresent(entry -> {
+                    savePersistentHologram(entry.getKey(), location, display.getText());
+                });
+                
+            // Update timed storage if this is a timed hologram
+            TimedHoloInfo info = timedInfos.get(id);
+            if (info != null) {
+                info.world = location.getWorld().getName();
+                info.x = location.getX();
+                info.y = location.getY();
+                info.z = location.getZ();
+                saveTimedHologram(info);
+            }
+            
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Edits the text of a hologram
+     * @param id The UUID of the hologram to edit
+     * @param newText The new text to set
+     * @return true if the hologram was found and updated, false otherwise
+     */
+    public boolean editHologram(UUID id, String newText) {
+        TextDisplay display = activeHolograms.get(id);
+        if (display != null) {
+            display.setText(HoloAPI.colorize(newText));
+            
+            // Update persistent storage if this is a persistent hologram
+            persistentIds.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(id))
+                .findFirst()
+                .ifPresent(entry -> {
+                    savePersistentHologram(entry.getKey(), display.getLocation(), newText);
+                });
+                
+            // Update timed storage if this is a timed hologram
+            TimedHoloInfo info = timedInfos.get(id);
+            if (info != null) {
+                info.text = newText;
+                saveTimedHologram(info);
+            }
+            
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Gets a hologram by its UUID
+     * @param id The UUID of the hologram
+     * @return The TextDisplay hologram, or null if not found
+     */
+    public TextDisplay getHologram(UUID id) {
+        return activeHolograms.get(id);
     }
 }
