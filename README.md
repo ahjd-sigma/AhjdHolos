@@ -25,15 +25,15 @@ Add the JitPack repository to your `pom.xml`:
     </repository>
 </repositories>
 ```
-Then add the dependency (replace `VERSION` with a release/tag, e.g. `v1.0.0`, for best stability):
+Then add the dependency (replace `VERSION` with a release/tag, e.g. `0.1`, for best stability):
 ```xml
 <dependency>
     <groupId>com.github.ahjd-sigma</groupId>
     <artifactId>AhjdHolos</artifactId>
-    <version>v1.0.0</version>
+    <version>0.1</version>
 </dependency>
 ```
-> **Tip:** You can use `main` for the latest commit, but using a tag like `v1.0.0` is recommended for stability.
+> **Tip:** You can use `main` for the latest commit, but using a tag like `0.1` is recommended for stability.
 
 
 #### **Gradle**
@@ -43,13 +43,13 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 ```
-Then add the dependency (replace `VERSION` with a release/tag, e.g. `v1.0.0`, for best stability):
+Then add the dependency (replace `VERSION` with a release/tag, e.g. `0.1`, for best stability):
 ```groovy
 dependencies {
-    implementation 'com.github.ahjd-sigma:AhjdHolos:v1.0.0'
+    implementation 'com.github.ahjd-sigma:AhjdHolos:0.1'
 }
 ```
-> **Tip:** You can use `main` for the latest commit, but using a tag like `v1.0.0` is recommended for stability.
+> **Tip:** You can use `main` for the latest commit, but using a tag like `0.1` is recommended for stability.
 
 
 ### 2. plugin.yml
@@ -58,19 +58,6 @@ Add this to your plugin's `plugin.yml` to ensure AhjdHolos loads before your plu
 depends:
   - AhjdHolos
 ```
-
-### 3. Manual/Local Alternative
-If you prefer, you can still build AhjdHolos locally and add the jar to your project as described below.
-
----
-
-## JitPack Troubleshooting
-- **401 Unauthorized:** Make sure your GitHub repo is public.
-- **Build errors:** Go to [JitPack Build Log](https://jitpack.io/#ahjd-sigma/AhjdHolos) and check for errors. You must have a valid `pom.xml` or `build.gradle` at the root.
-- **Version not found:** Make sure you have created a release or tag in GitHub and triggered a build on JitPack.
-- **Force Maven/Gradle to retry:**
-    - Maven: `mvn dependency:purge-local-repository -DmanualInclude="com.github.ahjd-sigma:AhjdHolos" -DreResolve=false`
-    - Gradle: `./gradlew --refresh-dependencies`
 
 ---
 
