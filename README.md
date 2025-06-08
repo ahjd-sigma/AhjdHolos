@@ -9,46 +9,6 @@ A robust, crash-safe hologram API for Spigot 1.21.5+.
 - **Automatic cleanup** of all holograms on plugin disable
 
 ---
-
-## Adding AhjdHolos as a Dependency
-
-### 1. Using JitPack (Recommended)
-Since AhjdHolos is public on GitHub, you can use [JitPack](https://jitpack.io/) to add it as a dependency in Maven or Gradle:
-
-#### **Maven**
-Add the JitPack repository to your `pom.xml`:
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-Then add the dependency (replace `VERSION` with a release/tag, e.g. `0.1`, for best stability):
-```xml
-<dependency>
-    <groupId>com.github.ahjd-sigma</groupId>
-    <artifactId>AhjdHolos</artifactId>
-    <version>0.1</version>
-</dependency>
-```
-> **Tip:** You can use `main` for the latest commit, but using a tag like `0.1` is recommended for stability.
-
-
-#### **Gradle**
-Add the JitPack repository to your `build.gradle`:
-```groovy
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-```
-Then add the dependency (replace `VERSION` with a release/tag, e.g. `0.1`, for best stability):
-```groovy
-dependencies {
-    implementation 'com.github.ahjd-sigma:AhjdHolos:0.1'
-}
-```
 > **Tip:** You can use `main` for the latest commit, but using a tag like `0.1` is recommended for stability.
 
 
