@@ -1,0 +1,7 @@
+name: AhjdHolos
+main: ahjd.ahjdHolos.AhjdHolos
+version: 1.0.0
+author: Ahjd
+api-version: 1.21
+commands: {}
+description: Public API plugin for spawning and managing holographic TextDisplay entities.
