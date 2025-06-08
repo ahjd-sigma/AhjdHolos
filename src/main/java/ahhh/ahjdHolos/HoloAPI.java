@@ -4,6 +4,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.TextDisplay;
+import ahhh.ahjdHolos.HoloDisplaySettings;
+import org.bukkit.Color;
+import org.bukkit.entity.Display.Billboard;
+import org.bukkit.entity.TextDisplay.TextAlignment;
 import java.util.UUID;
 
 /**
@@ -28,15 +32,42 @@ public class HoloAPI {
      * @param uniqueId For PERSISTENT, a unique string ID for this hologram. Null or empty for auto.
      * @return The spawned TextDisplay entity
      */
+    /**
+     * Spawns a hologram with advanced settings.
+     */
+    public static TextDisplay spawnHologram(Plugin plugin, Location location, String text, HoloDisplaySettings settings, HoloType type, int durationSeconds, String uniqueId) {
+        return HoloManager.getInstance().spawnHologram(plugin, location, text, settings, type, durationSeconds, uniqueId);
+    }
+
+    /**
+     * Spawns a hologram with default settings (legacy).
+     */
     public static TextDisplay spawnHologram(Plugin plugin, Location location, String text, HoloType type, int durationSeconds, String uniqueId) {
-        return HoloManager.getInstance().spawnHologram(plugin, location, text, type, durationSeconds, uniqueId);
+        return HoloManager.getInstance().spawnHologram(plugin, location, text, HoloDisplaySettings.builder().build(), type, durationSeconds, uniqueId);
     }
 
     /**
      * Backwards-compatible spawn: permanent, not saved.
      */
     public static TextDisplay spawnHologram(Plugin plugin, Location location, String text) {
-        return HoloManager.getInstance().spawnHologram(plugin, location, text, HoloType.TEMPORARY, 0, null);
+        return HoloManager.getInstance().spawnHologram(plugin, location, text, HoloDisplaySettings.builder().build(), HoloType.TEMPORARY, 0, null);
+    }
+
+    /**
+     * Utility for hex color codes in text. Supports {#RRGGBB} or &#RRGGBB.
+     */
+    public static String colorize(String text) {
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\{#([A-Fa-f0-9]{6})}|&#([A-Fa-f0-9]{6})");
+        java.util.regex.Matcher matcher = pattern.matcher(text);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String hex = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
+            StringBuilder out = new StringBuilder("§x");
+            for (char c : hex.toCharArray()) out.append('§').append(c);
+            matcher.appendReplacement(sb, out.toString());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     /**

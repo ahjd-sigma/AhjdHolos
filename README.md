@@ -1,6 +1,5 @@
 # AhjdHolos Public API Documentation
-
-A robust, crash-safe hologram API for Spigot 1.21.5+.
+evil emoji plugin by chatgpt
 
 ## Features
 - **Public API** for other plugins to spawn and manage holographic text (TextDisplay entities)
@@ -22,20 +21,127 @@ depends:
 ---
 
 ## Usage
+
 ### Import
 ```java
-import ahjd.ahjdHolos.HoloAPI;
-import ahjd.ahjdHolos.HoloType;
+import ahhh.ahjdHolos.HoloAPI;
+import ahhh.ahjdHolos.HoloType;
+import ahhh.ahjdHolos.HoloDisplaySettings;
 ```
 
 ### Spawning a Temporary (Timed) Hologram
 ```java
-// Spawns a hologram that despawns after 10 seconds
-TextDisplay holo = HoloAPI.spawnHologram(plugin, location, "Hello, world!", HoloType.TEMPORARY, 10, null);
+TextDisplay holo = HoloAPI.spawnHologram(
+    plugin,
+    location,
+    HoloAPI.colorize("{#FF00FF}Hello, world! {#00FFFF}\u2728"), // Hex color & icon support
+    HoloDisplaySettings.builder()
+        .font("minecraft:default")
+        .shadowed(true)
+        .seeThrough(true)
+        .textOpacity(200) // 0-255
+        .lineWidth(200)
+        .alignment(TextAlignment.CENTER)
+        .hasBackground(true)
+        .backgroundColor(Color.fromARGB(128, 0, 0, 0)) // ARGB
+        .billboard(Billboard.CENTER) // faces player like armorstand name
+        .build(),
+    HoloType.TEMPORARY,
+    10, // seconds
+    null
+);
 // Access the hologram's location from the TimedHoloInfo object
 TimedHoloInfo timedHoloInfo = HoloAPI.getTimedHoloInfo(holo.getUniqueId());
 Location holoLocation = timedHoloInfo.location;
 ```
+
+### Spawning a Persistent Hologram
+```java
+TextDisplay holo = HoloAPI.spawnHologram(
+    plugin,
+    location,
+    HoloAPI.colorize("{#00FF00}Welcome back!"),
+    HoloDisplaySettings.builder()
+        .shadowed(false)
+        .hasBackground(false)
+        .billboard(Billboard.CENTER)
+        .build(),
+    HoloType.PERSISTENT,
+    0, // duration ignored for persistent
+    "spawn_welcome" // unique id for persistence
+);
+```
+
+### Features
+- **Fonts:** Use any font key available to the client (resource pack required for custom fonts)
+- **Shadow, seethrough, text opacity**
+- **Line width, alignment**
+- **Background (on/off), ARGB color**
+- **Billboard:**
+  - `Billboard.CENTER` (default): faces player like armorstand names
+  - `Billboard.FIXED`: text stays static
+- **Hex color:** `{#RRGGBB}` or `&#RRGGBB` in text
+- **Icons:** Unicode icons supported if font/resource pack includes them
+- **Builder pattern:** Easy, modern developer API
+
+### Hex Color & Icons
+- Use `{#RRGGBB}` or `&#RRGGBB` in your text for hex colors.
+- Unicode icons (e.g., `\u2728`) are supported if your font/resource pack allows.
+
+### Troubleshooting
+- **Dependency not found:**
+  - Ensure your `plugin.yml` lists `AhjdHolos` under `depends:`.
+  - If using Maven, check your `pom.xml` dependency coordinates match the installed version.
+  - Reload/refresh your IDE and Maven project if symbols are not resolved.
+- **Font not working:**
+  - Custom fonts require the client to have a resource pack with the font key.
+- **Text not facing player:**
+  - Use `Billboard.CENTER` (default) for armorstand-style facing. Use `Billboard.FIXED` for static.
+- **Text scale:**
+  - Not supported in Spigot 1.21.4+ API (no `setTextScale`).
+
+---
+
+### Advanced Customization Example
+```java
+TextDisplay holo = HoloAPI.spawnHologram(
+    plugin,
+    location,
+    HoloAPI.colorize("{#FF00FF}Fancy & Animated Holo! {#00FFFF}984"), // supports hex color and icons
+    HoloDisplaySettings.builder()
+        .font("minecraft:uniform")
+        .shadowed(true)
+        .seeThrough(false)
+        .textOpacity(200)
+        .textScale(1.5f)
+        .lineWidth(300)
+        .alignment(TextAlignment.LEFT)
+        .hasBackground(true)
+        .backgroundColor(Color.fromARGB(128, 0, 0, 0))
+        .billboard(Billboard.CENTER)
+        .animated(true)
+        .animationSpeed(10L)
+        .build(),
+    HoloType.TEMPORARY,
+    30, // seconds
+    null
+);
+```
+
+### Hex Color and Icons
+- Use `{#RRGGBB}` or `&#RRGGBB` in your text for hex colors.
+- Unicode icons are supported if your font/resource pack allows.
+
+### All Features
+- Font selection (default if not present)
+- Shadow, see-through, text opacity, scale
+- Line width, alignment
+- Background (on/off), background color, transparency/opacity (ARGB)
+- Text rotation/orientation, fixed/billboard/animated/following
+- Hex color and icon support
+- Builder pattern for easy developer usage
+
+---
 
 ### Spawning a Persistent Hologram
 ```java
@@ -100,6 +206,3 @@ public class ExamplePlugin extends JavaPlugin {
 ```
 
 ---
-
-For more advanced features or questions, see the code or contact the author.
-git tag v1.0.0

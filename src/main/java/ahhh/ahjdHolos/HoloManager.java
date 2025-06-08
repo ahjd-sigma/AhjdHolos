@@ -38,12 +38,14 @@ class HoloManager {
         return instance;
     }
 
-    public TextDisplay spawnHologram(Plugin plugin, Location location, String text, HoloType type, int durationSeconds, String uniqueId) {
+    public TextDisplay spawnHologram(Plugin plugin, Location location, String text, HoloDisplaySettings settings, HoloType type, int durationSeconds, String uniqueId) {
         TextDisplay display = location.getWorld().spawn(location, TextDisplay.class, e -> {
-            e.setText(text);
-            e.setBillboard(org.bukkit.entity.Display.Billboard.FIXED);
-            e.setSeeThrough(true);
-            e.setPersistent(type == HoloType.PERSISTENT);
+            e.setText(HoloAPI.colorize(text));
+            if (settings != null) settings.apply(e);
+            else {
+                e.setBillboard(org.bukkit.entity.Display.Billboard.FIXED);
+                e.setSeeThrough(true);
+            }
         });
         activeHolograms.put(display.getUniqueId(), display);
         pluginHolograms.computeIfAbsent(plugin, k -> new HashSet<>()).add(display.getUniqueId());
@@ -63,6 +65,12 @@ class HoloManager {
         }
         return display;
     }
+
+    // Legacy for backward compatibility
+    public TextDisplay spawnHologram(Plugin plugin, Location location, String text, HoloType type, int durationSeconds, String uniqueId) {
+        return spawnHologram(plugin, location, text, HoloDisplaySettings.builder().build(), type, durationSeconds, uniqueId);
+    }
+
 
     private void savePersistentHologram(String id, Location loc, String text) {
         persistentConfig.set(id + ".world", loc.getWorld().getName());
